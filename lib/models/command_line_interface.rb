@@ -21,16 +21,43 @@ class CommandLineInterface
 
     user_input = gets.chomp
 
-    if user_input == "1"
-      Round.store_new_game
-    elsif user_input == "5"
+    case user_input
+
+    when "1"
+      #Round.store_new_game
+      create_game
+    when "2"
+      total_wins
+    when "3"
+      total_wins_by_sport
+    when "4"
+
+    when "5"
       total_games_played_by_sport
+    when "6"
+
+    when "7"
+
     end
   end
 
   def gets_input
     get.chomp
   end
+
+  def create_game
+  end
+
+  def total_wins
+  end
+
+  def total_wins_by_sport
+  end
+
+  def
+  end
+
+
 
   def total_games_played_by_sport
     puts "Which sport?"
