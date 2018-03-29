@@ -25,8 +25,8 @@ class User < ActiveRecord::Base
   end
 
   def user_rounds_played_by_sport(sport_input) #passing in a sport string
-    sport_search = Sport.find_by(name: sport_input)
-    puts Round.where(sport_id: sport_search.id).count
+    sport_search = Sport.find_or_create_by(name: sport_input)
+    puts Round.where({sport_id: sport_search.id, user_id: self.id}).count
   end
 
   def find_round_score(date_input)
@@ -36,13 +36,17 @@ class User < ActiveRecord::Base
 
   def delete_round(date_input) #string of a date
     round_search = Round.find_by(date: date_input)
-    puts "Are you sure you want to delete #{round_search}? Y/N"
+    puts "Are you sure you want to delete #{round_search.date}? y/n"
     user_input = gets.chomp
-    if user_input == "Y"
-      puts "#{round_search} deleted."
-      Round.destroy(round_search.id)
+    if user_input == "y"
+      if round_search
+        puts "#{round_search.date} deleted."
+        Round.destroy(round_search.id)
+      else
+        puts "This game does not exist."
+      end
     else
-      puts "#{round_search} not deleted."
+      puts "#{round_search.date} not deleted."
     end
   end
 end

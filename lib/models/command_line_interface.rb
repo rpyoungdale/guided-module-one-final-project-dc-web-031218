@@ -13,11 +13,10 @@ class CommandLineInterface
     puts "-------------------------"
     puts "Welcome #{user_name}!"
     sleep(3)
+    system "clear"
   end
 
   def gets_user_input
-    #ASK FOR NAME
-    puts "-------------------------"
     puts "What do you want to do?"
     puts "-------------------------"
     puts "Please Select an Option:"
