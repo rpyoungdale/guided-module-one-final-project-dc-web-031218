@@ -20,7 +20,7 @@ class User < ActiveRecord::Base
     round_search = Round.find_by(date: date_input)
     puts "Are you sure you want to delete #{round_search}? Y/N"
     user_input = gets.chomp
-    if user_input = "Y"
+    if user_input == "Y"
       puts "#{round_search} deleted."
       Round.destroy(round_search.id)
     else
