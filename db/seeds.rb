@@ -39,7 +39,7 @@ ryan_soccer = Round.create(
   user_score: 3,
   opponent_score: 3,
   result: "Tie",
-  date: "11/8/17"
+  date: "11/08/17"
 )
 bruno_basketball = Round.create(
   user_id: bruno.id,

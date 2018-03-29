@@ -1,17 +1,18 @@
-require_relative './round.rb'
-
 class CommandLineInterface
 
-attr_reader :current_user
+  attr_reader :current_user
 
   def greet
     puts "Welcome to your personal GameTracker!"
   end
 
   def determine_user
-  puts " Please enter your full name "
-  user_name = gets_input
-  @current_user = User.find_or_create_by(name: user_name)
+    puts "Please enter your full name:"
+    user_name = gets_input
+    @current_user = User.find_or_create_by(name: user_name)
+    puts "-------------------------"
+    puts "Welcome #{user_name}!"
+    sleep(3)
   end
 
   def gets_user_input
@@ -20,21 +21,15 @@ attr_reader :current_user
     puts "What do you want to do?"
     puts "-------------------------"
     puts "Please Select an Option:"
-    puts "  1. Enter New Game"
-    puts "  2. Total Wins"
-    puts "  3. Total Wins By Sport"
-    puts "  4. Total Games Played"
-    puts "  5. Total Games Played By Sport"
-    puts "  6. Find A Certain Score"
-    puts "  7. Delete Game"
+    puts "   1. Enter New Game", "   2. Total Wins", "   3. Total Wins By Sport", "   4. Total Games Played", "   5. Total Games Played By Sport", "   6. Find A Certain Score", "   7. Delete Game"
 
-    selection_input = gets.chomp
-  end
-
-  def make_selection(selection_input)
+    selection_input = gets_input
+  # end
+  #
+  # def make_selection(selection_input)
     case selection_input
     when "1"
-      create_game
+      create_new_round
     when "2"
       total_wins
     when "3"
@@ -48,36 +43,41 @@ attr_reader :current_user
     when "7"
       delete_game
     end
+
+    puts "Continue? yes or no "
+
+    if gets_input != "no"
+      gets_user_input
+    end
   end
 
   def gets_input
-    get.chomp
+    gets.chomp
   end
 
   def create_new_round
-    puts "what what the date of the game? please enter in the following format mm/dd/yyyy"
+    puts "When did you play this game? Enter: mm/dd/yy"
     date_input = gets_input
-    puts "what sport did you play"
+    puts "What sport did you play today?"
     sport_input = gets_input
-    puts "please indicate result by typing one of the following options: 'Win' 'Lose' 'Tie'"
+    puts "Please indicate game result: 'Win' 'Loss' 'Tie'"
     result_input = gets_input
-    puts "what was your individual final score?"
+    puts "What was your individual final score?"
     score_input = gets_input
-    puts "what was your opponent's final score"
+    puts "What was your opponent's final score?"
     opponent_score_input = gets_input
-    @current_user.upload_new_round(date_input, sport_input, result_input, user_score_input, opponent_score_input)
-    "New round saved"
+    @current_user.upload_new_round(date_input, sport_input, result_input, score_input, opponent_score_input)
+    puts "-- ROUND SAVED --"
   end
-
 
   def total_wins
     @current_user.wins
   end
 
   def total_wins_by_sport
-  puts "what sport wins?"
-  sport_input = gets_input
-  wins_by_sport(sport_input)
+    puts "what sport wins?"
+    sport_input = gets_input
+    @current_user.wins_by_sport(sport_input)
   end
 
   def total_games_played
@@ -87,7 +87,7 @@ attr_reader :current_user
   def total_games_played_by_sport
     puts "Which sport?"
     sports_input = gets_input
-    @current_user.user_rounds_played_by_sport(sport_input)
+    @current_user.user_rounds_played_by_sport(sports_input)
   end
 
   def find_score
@@ -102,6 +102,4 @@ attr_reader :current_user
     @current_user.delete_round(date_input)
   end
 
-
-end
 end
