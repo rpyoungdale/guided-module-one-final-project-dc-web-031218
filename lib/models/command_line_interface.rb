@@ -3,6 +3,7 @@ class CommandLineInterface
   attr_reader :current_user
 
   def greet
+    system "clear"
     puts "Welcome to your personal GameTracker!"
   end
 
@@ -43,9 +44,10 @@ class CommandLineInterface
       delete_game
     end
 
-    puts "Continue? yes or no "
+    puts "Continue? yes/no "
 
     if gets_input != "no"
+      system "clear"
       gets_user_input
     end
   end
@@ -74,7 +76,7 @@ class CommandLineInterface
   end
 
   def total_wins_by_sport
-    puts "what sport wins?"
+    puts "Which sport?"
     sport_input = gets_input
     @current_user.wins_by_sport(sport_input)
   end
@@ -91,14 +93,20 @@ class CommandLineInterface
 
   def find_score
     puts "What date did you play this game? Enter: mm/dd/yy"
+    show_date_options
     date_input = gets_input
     @current_user.find_round_score(date_input)
   end
 
   def delete_game
     puts "What date did you play this game? Enter: mm/dd/yy"
+    show_date_options
     date_input = gets_input
     @current_user.delete_round(date_input)
+  end
+
+  def show_date_options
+    @current_user.rounds.collect {|round| puts round.date}
   end
 
 end
