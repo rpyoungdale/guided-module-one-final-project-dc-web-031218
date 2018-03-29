@@ -1,9 +1,18 @@
 require_relative './round.rb'
 
 class CommandLineInterface
+
+attr_reader :current_user
+
   def greet
     puts "Welcome to your personal GameTracker!"
   end
+
+def determine_user
+puts " Please enter your full name "
+user_name = gets_input
+@current_user = User.find_or_create_by(name: user_name)
+end
 
   def gets_user_input
     #ASK FOR NAME
@@ -19,12 +28,12 @@ class CommandLineInterface
     puts "6. Find A Certain Score"
     puts "7. Delete Game"
 
-    user_input = gets.chomp
+    selection_input = gets.chomp
+  end
 
-    case user_input
-
+  def make_selection(selection_input)
+    case selection_input
     when "1"
-      #Round.store_new_game
       create_game
     when "2"
       total_wins
@@ -45,18 +54,31 @@ class CommandLineInterface
     get.chomp
   end
 
-  def create_game
+  def create_new_round
+    puts "what what the date of the game? please enter in the following format mm/dd/yyyy"
+    date_input = gets_input
+    puts "what sport did you play"
+    sport_input = gets_input
+    puts "please indicate result by typing one of the following options: 'Win' 'Lose' 'Tie'"
+    result_input = gets_input
+    puts "what was your individual final score?"
+    score_input = gets_input
+    puts "what was your opponent's final score"
+    opponent_score_input = gets_input
+    @current_user.upload_new_round(date_input, sport_input, result_input, user_score_input, opponent_score_input)
+    "New round saved"
   end
 
+
   def total_wins
+    @current_user.wins
   end
 
   def total_wins_by_sport
+  puts "what sport wins?"
+  sport_input = gets_input
+  wins_by_sport(sport_input)
   end
-
-  def
-  end
-
 
 
   def total_games_played_by_sport
@@ -64,4 +86,7 @@ class CommandLineInterface
     sports_input = gets_input
     user_rounds_played_by_sport(sport_input)
   end
+
+
+end
 end
