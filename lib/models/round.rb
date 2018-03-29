@@ -11,4 +11,5 @@ class Round < ActiveRecord::Base
     puts "What was your opponent's score?"
     opponent_score_input = gets.chomp
   end
+
 end
