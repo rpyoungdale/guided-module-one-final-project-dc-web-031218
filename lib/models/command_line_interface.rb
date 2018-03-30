@@ -4,20 +4,29 @@ class CommandLineInterface
 
   def greet
     system "clear"
-    puts "-- MoRyan Incorporated --"
-    sleep(4)
-    puts "Welcome to your personal GameTracker!"
-    sleep(3)
+    puts '
+   .___  ___.   ______   .______     ____    ____  ___      .__   __.
+   |   \/   |  /  __  \  |   _  \    \   \  /   / /   \     |  \ |  |
+   |  \  /  | |  |  |  | |  |_)  |    \   \/   / /  ^  \    |   \|  |
+   |  |\/|  | |  |  |  | |      /      \_    _/ /  /_\  \   |  . `  |
+   |  |  |  | |  `--`  | |  |\  \----.   |  |  /  _____  \  |  |\   |
+   |__|  |__|  \______/  | _| `._____|   |__| /__/     \__\ |__| \__| '
+    #puts "                                 ---                             "
+    puts "\n                      -- MoRyan Incorporated --                  "
+    puts "                                 ---                             "
+    #sleep(3)
+    puts "                Welcome to your personal GameTracker!            "
+    #sleep(3)
   end
 
   def determine_user
     system "clear"
-    puts "Please enter a new or existing username:"
+    puts "               Please enter a new or existing username:          "
     user_name = gets_input
     @current_user = User.find_or_create_by(name: user_name)
     puts "-------------------------"
     puts "Welcome #{user_name}!"
-    sleep(3)
+    #sleep(3)
     system "clear"
   end
 
@@ -25,12 +34,10 @@ class CommandLineInterface
     puts "What do you want to do?"
     puts "-------------------------"
     puts "Please Select an Option:"
-    puts "   1. Enter New Game", "   2. Total Wins", "   3. Total Wins By Sport", "   4. Total Games Played", "   5. Total Games Played By Sport", "   6. Find A Certain Score", "   7. Delete Game"
+    puts "   1. Enter New Game", "   2. Total Wins", "   3. Total Wins By Sport", "   4. Total Games Played", "   5. Total Games Played By Sport", "   6. Find A Certain Score", "   7. Delete Game", "   8. Exit GameTracker"
 
     selection_input = gets_input
-  # end
-  #
-  # def make_selection(selection_input)
+
     case selection_input
     when "1"
       create_new_round
@@ -46,12 +53,13 @@ class CommandLineInterface
       find_score
     when "7"
       delete_game
+    when "8"
+      return
     else
       puts "We're sorry. That is not an option."
     end
 
-    puts ""
-    puts "Continue? yes/no "
+    puts "\n Continue? yes/no "
 
     if gets_input != "no"
       system "clear"
@@ -60,8 +68,7 @@ class CommandLineInterface
   end
 
   def gets_input
-    puts ""
-    puts "-- Answer Below --"
+    puts "\n -- Answer Below --"
     gets.chomp
   end
 
@@ -83,7 +90,7 @@ class CommandLineInterface
     opponent_score_input = gets_input
     @current_user.upload_new_round(date_input, sport_input, result_input, score_input, opponent_score_input)
     system "clear"
-    puts "-- ROUND SAVED --"
+    puts "-- GAME SAVED --"
   end
 
   def total_wins
@@ -107,21 +114,27 @@ class CommandLineInterface
   end
 
   def find_score
-    puts "What date did you play this game?"
+    puts "\n What date did you play this game?"
+    puts "-----------------------------------"
     show_date_options
     date_input = gets_input
     @current_user.find_round_score(date_input)
   end
 
   def delete_game
-    puts "What date did you play this game?"
-    show_date_options
-    date_input = gets_input
-    @current_user.delete_round(date_input)
+    if @current_user.rounds.count > 0 #CHANGE
+      puts "\n Which game would you like to delete? Enter date:"
+      puts " -----------------------------------"
+      show_date_options
+      date_input = gets_input
+      @current_user.delete_round(date_input)
+    else
+      puts "\n You have no games to delete."
+    end
   end
 
   def show_date_options
-    @current_user.rounds.collect {|round| puts round.date}
+    @current_user.rounds.collect {|round| puts "\n #{round.sport.name} #{round.date}"}
   end
 
 end
