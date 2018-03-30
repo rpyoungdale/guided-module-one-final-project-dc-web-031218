@@ -11,12 +11,11 @@ class CommandLineInterface
    |  |\/|  | |  |  |  | |      /      \_    _/ /  /_\  \   |  . `  |
    |  |  |  | |  `--`  | |  |\  \----.   |  |  /  _____  \  |  |\   |
    |__|  |__|  \______/  | _| `._____|   |__| /__/     \__\ |__| \__| '
-    #puts "                                 ---                             "
     puts "\n                      -- MoRyan Incorporated --                  "
     puts "                                 ---                             "
-    #sleep(3)
+    sleep(3)
     puts "                Welcome to your personal GameTracker!            "
-    #sleep(3)
+    sleep(3)
   end
 
   def determine_user
@@ -26,7 +25,7 @@ class CommandLineInterface
     @current_user = User.find_or_create_by(name: user_name)
     puts "-------------------------"
     puts "Welcome #{user_name}!"
-    #sleep(3)
+    sleep(3)
     system "clear"
   end
 
