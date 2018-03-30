@@ -36,7 +36,7 @@ class User < ActiveRecord::Base
 
   def find_round_score(date_input)
     system "clear"
-    round_search = Round.find_by(date: date_input)
+    round_search = Round.find_by({date: date_input, user_id: self.id})
     puts "-- The game's score was #{round_search.user_score} to #{round_search.opponent_score} --"
   end
 

@@ -4,11 +4,15 @@ class CommandLineInterface
 
   def greet
     system "clear"
+    puts "-- MoRyan Incorporated --"
+    sleep(4)
     puts "Welcome to your personal GameTracker!"
+    sleep(3)
   end
 
   def determine_user
-    puts "Please enter your full name:"
+    system "clear"
+    puts "Please enter a new or existing username:"
     user_name = gets_input
     @current_user = User.find_or_create_by(name: user_name)
     puts "-------------------------"
@@ -42,8 +46,11 @@ class CommandLineInterface
       find_score
     when "7"
       delete_game
+    else
+      puts "We're sorry. That is not an option."
     end
 
+    puts ""
     puts "Continue? yes/no "
 
     if gets_input != "no"
@@ -53,21 +60,29 @@ class CommandLineInterface
   end
 
   def gets_input
+    puts ""
+    puts "-- Answer Below --"
     gets.chomp
   end
 
   def create_new_round
+    system "clear"
     puts "When did you play this game? Enter: mm/dd/yy"
     date_input = gets_input
+    system "clear"
     puts "What sport did you play today?"
     sport_input = gets_input
+    system "clear"
     puts "Please indicate game result: 'Win' 'Loss' 'Tie'"
     result_input = gets_input
+    system "clear"
     puts "What was your individual final score?"
     score_input = gets_input
+    system "clear"
     puts "What was your opponent's final score?"
     opponent_score_input = gets_input
     @current_user.upload_new_round(date_input, sport_input, result_input, score_input, opponent_score_input)
+    system "clear"
     puts "-- ROUND SAVED --"
   end
 
@@ -92,14 +107,14 @@ class CommandLineInterface
   end
 
   def find_score
-    puts "What date did you play this game? Enter: mm/dd/yy"
+    puts "What date did you play this game?"
     show_date_options
     date_input = gets_input
     @current_user.find_round_score(date_input)
   end
 
   def delete_game
-    puts "What date did you play this game? Enter: mm/dd/yy"
+    puts "What date did you play this game?"
     show_date_options
     date_input = gets_input
     @current_user.delete_round(date_input)
