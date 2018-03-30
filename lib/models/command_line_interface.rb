@@ -1,40 +1,46 @@
-require_relative './round.rb'
-
 class CommandLineInterface
 
-attr_reader :current_user
+  attr_reader :current_user
 
   def greet
-    puts "Welcome to your personal GameTracker!"
+    system "clear"
+    puts '
+   .___  ___.   ______   .______     ____    ____  ___      .__   __.
+   |   \/   |  /  __  \  |   _  \    \   \  /   / /   \     |  \ |  |
+   |  \  /  | |  |  |  | |  |_)  |    \   \/   / /  ^  \    |   \|  |
+   |  |\/|  | |  |  |  | |      /      \_    _/ /  /_\  \   |  . `  |
+   |  |  |  | |  `--`  | |  |\  \----.   |  |  /  _____  \  |  |\   |
+   |__|  |__|  \______/  | _| `._____|   |__| /__/     \__\ |__| \__| '
+    #puts "                                 ---                             "
+    puts "\n                      -- MoRyan Incorporated --                  "
+    puts "                                 ---                             "
+    #sleep(3)
+    puts "                Welcome to your personal GameTracker!            "
+    #sleep(3)
   end
 
   def determine_user
-  puts " Please enter your full name "
-  user_name = gets_input
-  @current_user = User.find_or_create_by(name: user_name)
+    system "clear"
+    puts "               Please enter a new or existing username:          "
+    user_name = gets_input
+    @current_user = User.find_or_create_by(name: user_name)
+    puts "-------------------------"
+    puts "Welcome #{user_name}!"
+    #sleep(3)
+    system "clear"
   end
 
   def gets_user_input
-    #ASK FOR NAME
-    puts "-------------------------"
     puts "What do you want to do?"
     puts "-------------------------"
     puts "Please Select an Option:"
-    puts "  1. Enter New Game"
-    puts "  2. Total Wins"
-    puts "  3. Total Wins By Sport"
-    puts "  4. Total Games Played"
-    puts "  5. Total Games Played By Sport"
-    puts "  6. Find A Certain Score"
-    puts "  7. Delete Game"
+    puts "   1. Enter New Game", "   2. Total Wins", "   3. Total Wins By Sport", "   4. Total Games Played", "   5. Total Games Played By Sport", "   6. Find A Certain Score", "   7. Delete Game", "   8. Exit GameTracker"
 
-    selection_input = gets.chomp
-  end
+    selection_input = gets_input
 
-  def make_selection(selection_input)
     case selection_input
     when "1"
-      create_game
+      create_new_round
     when "2"
       total_wins
     when "3"
@@ -47,37 +53,54 @@ attr_reader :current_user
       find_score
     when "7"
       delete_game
+    when "8"
+      return
+    else
+      puts "We're sorry. That is not an option."
+    end
+
+    puts "\n Continue? yes/no "
+
+    if gets_input != "no"
+      system "clear"
+      gets_user_input
     end
   end
 
   def gets_input
-    get.chomp
+    puts "\n -- Answer Below --"
+    gets.chomp
   end
 
   def create_new_round
-    puts "what what the date of the game? please enter in the following format mm/dd/yyyy"
+    system "clear"
+    puts "When did you play this game? Enter: mm/dd/yy"
     date_input = gets_input
-    puts "what sport did you play"
+    system "clear"
+    puts "What sport did you play today?"
     sport_input = gets_input
-    puts "please indicate result by typing one of the following options: 'Win' 'Lose' 'Tie'"
+    system "clear"
+    puts "Please indicate game result: 'Win' 'Loss' 'Tie'"
     result_input = gets_input
-    puts "what was your individual final score?"
+    system "clear"
+    puts "What was your individual final score?"
     score_input = gets_input
-    puts "what was your opponent's final score"
+    system "clear"
+    puts "What was your opponent's final score?"
     opponent_score_input = gets_input
-    @current_user.upload_new_round(date_input, sport_input, result_input, user_score_input, opponent_score_input)
-    "New round saved"
+    @current_user.upload_new_round(date_input, sport_input, result_input, score_input, opponent_score_input)
+    system "clear"
+    puts "-- GAME SAVED --"
   end
-
 
   def total_wins
     @current_user.wins
   end
 
   def total_wins_by_sport
-  puts "what sport wins?"
-  sport_input = gets_input
-  wins_by_sport(sport_input)
+    puts "Which sport?"
+    sport_input = gets_input
+    @current_user.wins_by_sport(sport_input)
   end
 
   def total_games_played
@@ -87,21 +110,31 @@ attr_reader :current_user
   def total_games_played_by_sport
     puts "Which sport?"
     sports_input = gets_input
-    @current_user.user_rounds_played_by_sport(sport_input)
+    @current_user.user_rounds_played_by_sport(sports_input)
   end
 
   def find_score
-    puts "What date did you play this game? Enter: mm/dd/yy"
+    puts "\n What date did you play this game?"
+    puts "-----------------------------------"
+    show_date_options
     date_input = gets_input
     @current_user.find_round_score(date_input)
   end
 
   def delete_game
-    puts "What date did you play this game? Enter: mm/dd/yy"
-    date_input = gets_input
-    @current_user.delete_round(date_input)
+    if @current_user.rounds.count > 0 #CHANGE
+      puts "\n Which game would you like to delete? Enter date:"
+      puts " -----------------------------------"
+      show_date_options
+      date_input = gets_input
+      @current_user.delete_round(date_input)
+    else
+      puts "\n You have no games to delete."
+    end
   end
 
+  def show_date_options
+    @current_user.rounds.collect {|round| puts "\n #{round.sport.name} #{round.date}"}
+  end
 
-end
 end
