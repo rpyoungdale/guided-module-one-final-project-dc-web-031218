@@ -4,7 +4,11 @@ class User < ActiveRecord::Base
 
   def wins
     system "clear"
-    puts "-- You've won #{Round.where({result: "Win", user_id: self.id}).count} game(s) --"
+    puts "-- You've won #{self.win_number} game(s) --"
+  end
+
+  def win_number
+    Round.where({result: "Win", user_id: self.id}).count
   end
 
   def wins_by_sport(sport_input)
@@ -12,9 +16,6 @@ class User < ActiveRecord::Base
     sport = Sport.find_by(name: sport_input)
     puts "-- You've won #{Round.where({result: "Win", user_id: self.id, sport: sport}).count} game(s) of #{sport_input} --"
   end
-  # def total_rounds
-  #   Round.where({user_id: self.id}).count
-  # end
   def upload_new_round(date_input, sport_input, result_input, user_score_input, opponent_score_input)
     system "clear"
     sport = Sport.find_or_create_by(name: sport_input)
@@ -34,7 +35,7 @@ class User < ActiveRecord::Base
 
   def find_round_score(date_input)
     system "clear"
-    round_search = Round.find_by({date: date_input, user_id: self.id})
+    round_search = self.rounds.find_by({date: date_input, user_id: self.id})
     if round_search
       puts "-- The game's score was #{round_search.user_score} to #{round_search.opponent_score} --"
     else
@@ -59,3 +60,7 @@ class User < ActiveRecord::Base
     end
   end
 end
+
+# def total_rounds
+#   Round.where({user_id: self.id}).count
+# end

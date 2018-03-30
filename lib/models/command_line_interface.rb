@@ -11,16 +11,15 @@ class CommandLineInterface
    |  |\/|  | |  |  |  | |      /      \_    _/ /  /_\  \   |  . `  |
    |  |  |  | |  `--`  | |  |\  \----.   |  |  /  _____  \  |  |\   |
    |__|  |__|  \______/  | _| `._____|   |__| /__/     \__\ |__| \__| '
-    puts "\n                      -- MoRyan Incorporated --                  "
-    puts "                                 ---                             "
+    puts "\n               -- Mor & Ryan's Module 1 Final Project --              "
     sleep(3)
-    puts "                Welcome to your personal GameTracker!            "
+    puts "\n                 Welcome to your personal GameTracker!            "
     sleep(3)
   end
 
   def determine_user
-    system "clear"
-    puts "               Please enter a new or existing username:          "
+    #system "clear"
+    puts "\nPlease enter a new or existing username:"
     user_name = gets_input
     @current_user = User.find_or_create_by(name: user_name)
     puts "-------------------------"
@@ -33,7 +32,7 @@ class CommandLineInterface
     puts "What do you want to do?"
     puts "-------------------------"
     puts "Please Select an Option:"
-    puts "   1. Enter New Game", "   2. Total Wins", "   3. Total Wins By Sport", "   4. Total Games Played", "   5. Total Games Played By Sport", "   6. Find A Certain Score", "   7. Delete Game", "   8. Exit GameTracker"
+    puts "   1. Enter New Game", "   2. Total Wins", "   3. Total Wins By Sport", "   4. Total Games Played", "   5. Total Games Played By Sport", "   6. Find A Certain Score", "   7. Leaderboard", "   8. Delete Game", "   9. Switch User", "   10. Exit GameTracker"
 
     selection_input = gets_input
 
@@ -51,8 +50,14 @@ class CommandLineInterface
     when "6"
       find_score
     when "7"
-      delete_game
+      leaderboard
     when "8"
+      delete_game
+    when "9"
+      switch_user
+    when "10"
+      puts "                            --- GOODBYE ---"
+      sleep(3)
       return
     else
       puts "We're sorry. That is not an option."
@@ -63,6 +68,9 @@ class CommandLineInterface
     if gets_input != "no"
       system "clear"
       gets_user_input
+    else
+      puts "                            --- GOODBYE ---"
+      sleep(3)
     end
   end
 
@@ -97,7 +105,7 @@ class CommandLineInterface
   end
 
   def total_wins_by_sport
-    puts "Which sport?"
+    puts "\n Which sport?"
     sport_input = gets_input
     @current_user.wins_by_sport(sport_input)
   end
@@ -107,7 +115,7 @@ class CommandLineInterface
   end
 
   def total_games_played_by_sport
-    puts "Which sport?"
+    puts "\n Which sport?"
     sports_input = gets_input
     @current_user.user_rounds_played_by_sport(sports_input)
   end
@@ -136,4 +144,16 @@ class CommandLineInterface
     @current_user.rounds.collect {|round| puts "\n #{round.sport.name} #{round.date}"}
   end
 
+  def switch_user
+    puts "Please enter Username"
+    switch_user_input = gets_input
+    @current_user = User.find_or_create_by(name: "#{switch_user_input}")
+  end
+
+  def leaderboard
+    puts ""
+    users = User.all
+    sorted_users = users.sort_by {|user| user.win_number}.reverse
+    sorted_users.each {|user| puts "#{user.name} - #{user.win_number} wins"}
+   end
 end
